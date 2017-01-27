@@ -9,14 +9,30 @@
   <body ng-controller='foodController as ctrl'>
 
     <form ng-submit='ctrl.query();'>
-      <input type="text" ng-model='ctrl.searchTerm' placeholder="Food Here">
+      <!-- <input type="text" ng-model='ctrl.searchTerm' placeholder="Food Here"> -->
+     <input type="radio" ng-model="ctrl.cuisine" value="cuisine"> Cuisine<br>
+     <p>(Examples: Italian, Vegan, Breakfast)</p><br>
+     <input type="radio" ng-model="ctrl.foods" value="foods"> Foods<br>
+     <p>(Examples: Guacamole, Dumplings, Cookies)</p><br>
       <input type="submit" value="Submit">
     </form>
 
-    <h2>Recipe Results</h2>
+    <h2>Recipes</h2>
     <div ng-repeat='recipe in ctrl.recipeData'>
       <a href='{{recipe.source_url}}'><img ng-src="{{recipe.image_url}}" alt=""/></a>
       <p>{{recipe.title}}</p>
     </div>
+
+    <form ng-submit='ctrl.locQuery();'>
+      <input type="text" ng-model='ctrl.location' placeholder="City or Postal Code">
+      <input type="submit" value="Submit">
+    </form>
+
+    <h2>Restaurants</h2>
+    <div ng-repeat='place in ctrl.placeData'>
+      <a href="{{place.url}}">{{place.name}}</a>
+      <a href='{{place.image_url}}'><img ng-src="{{place.image_url}}" alt="Restaurant Image Url"/></a>
+    </div>
+
   </body>
 </html>
