@@ -9,11 +9,7 @@
   <body ng-controller='foodController as ctrl'>
 
     <form ng-submit='ctrl.query();'>
-      <!-- <input type="text" ng-model='ctrl.searchTerm' placeholder="Food Here"> -->
-     <input type="radio" ng-model="ctrl.cuisine" value="cuisine"> Cuisine<br>
-     <p>(Examples: Italian, Vegan, Breakfast)</p><br>
-     <input type="radio" ng-model="ctrl.foods" value="foods"> Foods<br>
-     <p>(Examples: Guacamole, Dumplings, Cookies)</p><br>
+      <input type="text" ng-model='ctrl.searchTerm' placeholder="Food Here">
       <input type="submit" value="Submit">
     </form>
 
@@ -23,7 +19,7 @@
       <p>{{recipe.title}}</p>
     </div>
 
-    <form ng-submit='ctrl.locQuery();'>
+    <form ng-submit='ctrl.placeQuery();'>
       <input type="text" ng-model='ctrl.location' placeholder="City or Postal Code">
       <input type="submit" value="Submit">
     </form>
