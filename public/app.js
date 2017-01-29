@@ -34,6 +34,20 @@ app.controller('foodController', ['$http', function($http) {
       categoryId = response.data.id;
     }.bind(this));
     // Yelp API call here
+    $http({
+      method: 'GET',
+      url: "https://api.yelp.com/v3/businesses/search?term=" + this.searchTerm + "&location=" + this.location +  "&categories=restaurants&sort_by=distance",
+      headers: {
+        'authorization': 'Bearer kxeNhjKVOho4QTBNr0mSGwdtCKGZTmW-PgvVQpjMkrNIucjw3uN63VJWg8GxX6j4DsI4Xn1oaWKQO-HzJBFQJzu0-XUzIeNZqv8ghhER5m_IQFCs3NjWF3ST6QWOWHYx',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Headers' : '*',
+        'Access-Control-Allow-Methods' : 'OPTIONS'
+      },
+    }).then(function(response) {
+      console.log(response.data);
+      console.log(response.data.places);
+      this.placeData = response.data.places;
+    }.bind(this));
 
     // Food2Fork API call here
     $http({
@@ -55,25 +69,6 @@ app.controller('foodController', ['$http', function($http) {
     }.bind(this));
   };
 
-<<<<<<< HEAD
-  this.placeQuery = function() {
-    $http({
-      method: 'GET',
-      url: "https://api.yelp.com/v3/businesses/search?term=" + this.searchTerm + "&location=" + this.location +  "&categories=restaurants&sort_by=distance",
-      headers: {
-        'authorization': 'Bearer kxeNhjKVOho4QTBNr0mSGwdtCKGZTmW-PgvVQpjMkrNIucjw3uN63VJWg8GxX6j4DsI4Xn1oaWKQO-HzJBFQJzu0-XUzIeNZqv8ghhER5m_IQFCs3NjWF3ST6QWOWHYx',
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Headers' : '*',
-        'Access-Control-Allow-Methods' : 'OPTIONS'
-      },
-      xsrfHeaderName : ""
-    }).then(function(response) {
-      console.log(response.data);
-      console.log(response.data.places);
-      this.placeData = response.data.places;
-    }.bind(this));
-  };
-=======
   // Function to add a recipe to the db:
   this.addRecipe = function(index) {
 
@@ -86,6 +81,5 @@ app.controller('foodController', ['$http', function($http) {
       console.log(response);
     }.bind(this));
   }
->>>>>>> master
 
 }]); // end app controller
