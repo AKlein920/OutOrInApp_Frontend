@@ -22,6 +22,16 @@ app.controller('foodController', ['$http', function($http) {
   // Function to populate results from 2 APIs
   this.query = function() {
 
+    // check if category list includes current search term:
+    $http({
+      method: 'GET',
+      url: 'http://localhost:3000/categories'
+    }).then(function(response) {
+      console.log(response.data);
+      this.allCategories.sort() = response.data;
+    }.bind(this));
+
+    // add current search term to category list
     $http({
       method: 'POST',
       url: 'http://localhost:3000/categories',
