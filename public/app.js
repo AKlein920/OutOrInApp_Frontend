@@ -118,4 +118,19 @@ app.controller('foodController', ['$http', function($http) {
     }.bind(this));
   }
 
+  // Function to edit a category:
+  this.editCategory = function(index) {
+    $http({
+      method: 'PUT',
+      url: 'http://localhost:3000/categories/' + this.categories[index].id,
+      data: {
+        name: this.editCategoryData.name,
+        description: this.editCategoryData.description
+      }
+    }).then(function(response) {
+      console.log('editing category');
+      console.log(response.data);
+    }.bind(this));
+  }
+
 }]); // end app controller

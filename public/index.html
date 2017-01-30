@@ -15,10 +15,33 @@
 
     <div class=''>
       <h2>All Categories</h2>
-        <ul>
-          <li data-toggle="modal" data-target="#recipeModal" ng-click='ctrl.showRecipesByCategory($index);' ng-repeat='category in ctrl.categories track by $index'>{{category.name}}</li>
-        </ul>
-    </div>
+          <div ng-click='ctrl.showRecipesByCategory($index);' ng-repeat='category in ctrl.categories track by $index'>
+            <strong data-toggle="modal" data-target="#recipeModal">{{category.name}}</strong> <button type="button" data-toggle='modal' data-target='#editCategoryModal'>Edit Category</button>
+            <!-- Edit Category Modal -->
+          <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModal">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="editCategoryModal">Edit Category</h4>
+                </div>
+                <div class="modal-body">
+                  <form ng-submit='ctrl.editCategory($index);'>
+                    <input type="text" ng-model='ctrl.editCategoryData.name' placeholder="Name">
+                    <input type="text" ng-model='ctrl.editCategoryData.description' placeholder="Description">
+                    <button type="submit">Edit</button>
+                  </form>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
 
     <!-- Show Recipes by Category Modal -->
   <div class="modal fade" id="recipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeModal">
