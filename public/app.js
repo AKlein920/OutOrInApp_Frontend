@@ -29,7 +29,7 @@ app.controller('foodController', ['$http', function($http) {
   this.key = '4674c93fb8691a3cc6c841773dc368e4';
   this.searchTerm = '';
 
-  // Function to populate results from 2 APIs
+  // Function to populate results from API:
   this.query = function() {
     this.searchTerm = this.searchTerm.toLowerCase();
 
@@ -105,6 +105,16 @@ app.controller('foodController', ['$http', function($http) {
     }).then(function(response) {
       console.log('adding recipe');
       console.log(response);
+    }.bind(this));
+  }
+
+  // Function to delete recipe:
+  this.deleteRecipe = function(index) {
+    $http({
+      method: 'DELETE',
+      url: 'http://localhost:3000/categories/' + this.categoryRecipes[index].category_id + '/recipes/' + this.categoryRecipes[index].id
+    }).then(function(response) {
+      console.log('deleting recipe');
     }.bind(this));
   }
 

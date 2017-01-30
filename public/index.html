@@ -29,8 +29,9 @@
         <h4 class="modal-title" id="recipeModal">All Recipes</h4>
       </div>
       <div class="modal-body">
-        <div ng-repeat='recipe in ctrl.categoryRecipes'>
+        <div ng-repeat='recipe in ctrl.categoryRecipes track by $index'>
           <a href="{{recipe.url}}">{{recipe.name}}</a>
+          <button type="button" ng-click='ctrl.deleteRecipe($index)'>Delete</button>
         </div>
       </div>
       <div class="modal-footer">
