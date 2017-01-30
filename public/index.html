@@ -13,12 +13,38 @@
   </head>
   <body ng-controller='foodController as ctrl'>
 
+    <!-- Sign Up -->
+    <div class="">
+      <h2>Sign Up</h2>
+      <form ng-submit='ctrl.signUp();'>
+        <input type="text" ng-model='ctrl.signUpData.username' placeholder='Username'>
+        <input type="text" ng-model='ctrl.signUpData.password' placeholder="Password">
+        <input type="submit" value="Sign Up">
+      </form>
+      <p ng-if='ctrl.signedUp'>All signed up. Now log in!</p>
+    </div>
+
+    <!-- login -->
+    <div class="">
+      <h2>Log In</h2>
+      <form ng-submit='ctrl.login();'>
+        <input type="text" ng-model='ctrl.signIn.username' placeholder='Username'>
+        <input type="text" ng-model='ctrl.signIn.password' placeholder="Password">
+        <input type="submit" name="" value="Log In">
+      </form>
+
+      <button type="submit" ng-click='ctrl.logout();'>Log Out</button>
+    </div>
+
+    <p ng-if='ctrl.loggedIn'>Logged In User's Username: {{ctrl.currentUser.username}}</p>
+
     <div class=''>
+
       <h2>All Categories</h2>
         <div ng-click='ctrl.showRecipesByCategory($index);' ng-repeat='category in ctrl.categories track by $index'>
             <strong data-toggle="modal" data-target="#recipeModal">{{category.name}}</strong>
             <button type="button" data-toggle='modal' data-target='#editCategoryModal'>Edit Category</button>
-            
+
               <!-- Edit Category Modal -->
             <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModal">
                 <div class="modal-dialog" role="document">
