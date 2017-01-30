@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/smtlb/GoodForWorkingApp_Frontend#readme",
   "dependencies": {
-    "express": "^4.14.0"
+    "dotenv": "^4.0.0",
+    "express": "^4.14.0",
+    "yelpv3": "^1.2.1"
   }
 }
