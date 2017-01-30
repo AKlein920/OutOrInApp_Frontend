@@ -11,8 +11,9 @@ app.controller('foodController', ['$http', function($http) {
       url: 'http://localhost:3000/categories'
     }).then(function(response) {
       // console.log(response);
-      console.log(response.data);
+      // console.log(response.data);
       this.categories = response.data;
+      console.log(this.categories);
     }.bind(this));
 
   // function to show all of that category's recipes:
@@ -33,22 +34,20 @@ app.controller('foodController', ['$http', function($http) {
   this.query = function() {
     this.searchTerm = this.searchTerm.toLowerCase();
 
-    // get all categories:
-    $http({
-      method: 'GET',
-      url: 'http://localhost:3000/categories'
-    }).then(function(response) {
-      this.allCategories = response.data;
-    }.bind(this));
+    // // get all categories:
+    // $http({
+    //   method: 'GET',
+    //   url: 'http://localhost:3000/categories'
+    // }).then(function(response) {
+    //   this.categories = response.data;
+    // }.bind(this));
 
     // check if category list already includes current search term:
-    // for (var i = 0; i < allCategories.length; i++) {
-    //   if (allCategories[i].name == this.searchTerm) {
-    //     this.currentCategoryId = allCategories[i].id;
-    //   }
-    // }
+    function isUnique (term, index, array) {
+      term == this.categories[index].name
+    } // looking for false here
 
-    // add current searchTerm to category list and grab its id:
+    if (this.categories.every(isUnique)) {
       $http({
         method: 'POST',
         url: 'http://localhost:3000/categories',
@@ -59,6 +58,7 @@ app.controller('foodController', ['$http', function($http) {
           console.log(response);
           categoryId = response.data.id;
         }.bind(this));
+
         // get recipes from API:
         $http({
           method: 'GET',
@@ -77,7 +77,11 @@ app.controller('foodController', ['$http', function($http) {
           // console.log(this.recipeGroup);
           // this returns a maximum of 30 recipes; could put in a shuffle function to shuffle the array and display in random order instead of same order every time?
         }.bind(this));
-      } /////////// END this.query function
+    } else {
+
+    }
+
+  } /////////// END this.query function
 
 
     // Yelp API call here
