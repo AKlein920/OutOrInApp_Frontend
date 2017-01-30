@@ -2,47 +2,88 @@
 <html ng-app='FoodApp'>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript" src='app.js'></script>
     <base href="/"/>
     <title></title>
   </head>
   <body ng-controller='foodController as ctrl'>
 
+    <div class=''>
+      <h2>All Categories</h2>
+          <div ng-click='ctrl.showRecipesByCategory($index);' ng-repeat='category in ctrl.categories track by $index'>
+            <strong data-toggle="modal" data-target="#recipeModal">{{category.name}}</strong> <button type="button" data-toggle='modal' data-target='#editCategoryModal'>Edit Category</button>
+            <!-- Edit Category Modal -->
+          <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModal">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="editCategoryModal">Edit Category</h4>
+                </div>
+                <div class="modal-body">
+                  <form ng-submit='ctrl.editCategory($index);'>
+                    <input type="text" ng-model='ctrl.editCategoryData.name' placeholder="Name">
+                    <input type="text" ng-model='ctrl.editCategoryData.description' placeholder="Description">
+                    <button type="submit">Edit</button>
+                  </form>
+                  </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <button type="submit" ng-click='ctrl.getCategories();'>Get All Categories</button>
 
-    <div>
-      <ul>
-        <li ng-repeat='category in ctrl.categories'>{{category.name}} | {{category.description}}</li>
-      </ul>
+
+    <!-- Show Recipes by Category Modal -->
+  <div class="modal fade" id="recipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="recipeModal">All Recipes</h4>
+      </div>
+      <div class="modal-body">
+        <div ng-repeat='recipe in ctrl.categoryRecipes track by $index'>
+          <a href="{{recipe.url}}">{{recipe.name}}</a>
+          <button type="button" ng-click='ctrl.deleteRecipe($index)'>Delete</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
-
+  </div>
+</div>
 
     <form ng-submit='ctrl.query();'>
-      <input type="text" ng-model='ctrl.locationSearch' placeholder="Location Here"/>
       <input id='input' type="text" ng-model='ctrl.searchTerm' placeholder="Food Here"/>
       <input type="submit" value="Submit"/>
     </form>
 
     <h2>Recipe Results</h2>
-    <div ng-repeat='recipe in ctrl.recipeGroup track by $index'>
-      <a href='{{recipe.url}}'><img ng-src="{{recipe.img_url}}" alt=""/></a>
+    <div class='recipeItem' ng-repeat='recipe in ctrl.recipeGroup track by $index'>
+      <a href='{{recipe.url}}'>
+        <div class="recipeImgHolder">
+          <img class='recipeItemImg' ng-src="{{recipe.img_url}}" alt=""/>
+        </div>
+      </a>
       <p>{{recipe.name}}</p>
-      <button type="button" ng-click='ctrl.addRecipe($index);'>Add to Database</button>
+      <button type="button" ng-click='ctrl.addRecipe($index);'>Add</button>
     </div>
 
-    <form ng-submit='ctrl.placeQuery();'>
-      <input type="text" ng-model='ctrl.location' placeholder="City or Postal Code">
-      <input type="submit" value="Submit">
-    </form>
-
-    <h2>Restaurants</h2>
+    <!-- <h2>Restaurants</h2>
     <div ng-repeat='place in ctrl.placeData'>
       <a href="{{place.url}}">{{place.name}}</a>
       <a href='{{place.image_url}}'><img ng-src="{{place.image_url}}" alt="Restaurant Image Url"/></a>
-    </div>
+    </div> -->
 
   </body>
 </html>

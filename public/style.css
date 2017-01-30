@@ -1,0 +1,24 @@
+.recipeItem {
+  display: inline-block;
+  background-color: #B5BFC1;
+  border-radius: 5%;
+  margin: 1%;
+  height: 200px;
+  width: 200px;
+  /*box-shadow: 10px 10px 12px -4px rgba(128, 128, 124, 0.25);*/
+}
+
+.recipeImgHolder {
+  z-index: 1;
+  opacity: 1;
+  height: 62%;
+  width: 95%;
+}
+
+.recipeItemImg {
+  height: auto;
+  max-height: 98%;
+  width: auto;
+  max-width: 100%;
+  margin-top: 2%;
+}
