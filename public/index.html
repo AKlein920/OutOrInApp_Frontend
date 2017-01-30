@@ -13,12 +13,26 @@
   </head>
   <body ng-controller='foodController as ctrl'>
 
+    <!-- login -->
+    <div class="">
+      <form ng-submit='ctrl.login();'>
+        <input type="text" ng-model='ctrl.signIn.username' placeholder='Username'>
+        <input type="text" ng-model='ctrl.signIn.password' placeholder="Password">
+        <input type="submit" name="" value="Log In">
+      </form>
+
+      <button type="submit" ng-click='ctrl.logout();'>Log Out</button>
+    </div>
+
+    <p ng-if='ctrl.loggedIn'>Logged In User's Username: {{ctrl.currentUser.username}}</p>
+
     <div class=''>
+
       <h2>All Categories</h2>
         <div ng-click='ctrl.showRecipesByCategory($index);' ng-repeat='category in ctrl.categories track by $index'>
             <strong data-toggle="modal" data-target="#recipeModal">{{category.name}}</strong>
             <button type="button" data-toggle='modal' data-target='#editCategoryModal'>Edit Category</button>
-            
+
               <!-- Edit Category Modal -->
             <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModal">
                 <div class="modal-dialog" role="document">
