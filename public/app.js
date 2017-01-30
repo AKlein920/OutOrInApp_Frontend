@@ -29,7 +29,8 @@ app.controller('foodController', ['$http', function($http) {
       url: 'http://localhost:3000/categories'
     }).then(function(response) {
       console.log(response.data);
-      this.allCategories.sort() = response.data;
+      this.allCategories = response.data;
+      this.allCategories.sort();
     }.bind(this));
 
     // add current search term to category list
