@@ -13,8 +13,20 @@
   </head>
   <body ng-controller='foodController as ctrl'>
 
+    <!-- Sign Up -->
+    <div class="">
+      <h2>Sign Up</h2>
+      <form ng-submit='ctrl.signUp();'>
+        <input type="text" ng-model='ctrl.signUpData.username' placeholder='Username'>
+        <input type="text" ng-model='ctrl.signUpData.password' placeholder="Password">
+        <input type="submit" value="Sign Up">
+      </form>
+      <p ng-if='ctrl.signedUp'>All signed up. Now log in!</p>
+    </div>
+
     <!-- login -->
     <div class="">
+      <h2>Log In</h2>
       <form ng-submit='ctrl.login();'>
         <input type="text" ng-model='ctrl.signIn.username' placeholder='Username'>
         <input type="text" ng-model='ctrl.signIn.password' placeholder="Password">

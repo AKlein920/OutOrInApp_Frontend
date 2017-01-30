@@ -2,6 +2,22 @@ var app = angular.module("FoodApp", []);
 
 app.controller('foodController', ['$http', function($http) {
 
+  ///// Function to Sign Up:
+  this.signUpData = {};
+  this.signedUp = false;
+  this.signUp = function() {
+    $http({
+      method: 'POST',
+      url: 'http://localhost:3000/users',
+      data: {user: {username: this.signUpData.username, password: this.signUpData.password}}
+    }).then(function(response) {
+      console.log('signing up');
+      console.log(response.data);
+      this.signUpData = {};
+      this.signedUp = true;
+    }.bind(this));
+  }
+
   ///// Function to Log In:
   this.loggedIn = false;
   this.signIn = {};
@@ -16,6 +32,7 @@ app.controller('foodController', ['$http', function($http) {
       this.currentUser = response.data.user;
       localStorage.setItem('token', JSON.stringify(response.data.token))
       console.log(this.currentUser);
+      this.signIn = {};
       this.loggedIn = true;
     }.bind(this));
   }
