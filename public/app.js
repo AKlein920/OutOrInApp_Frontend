@@ -31,6 +31,11 @@ app.controller('foodController', ['$http', function($http) {
       console.log(response.data);
       this.allCategories = response.data;
       this.allCategories.sort();
+      for (var i = 0; i < this.allCategories.length; i++) {
+        if (this.allCategories[i] == this.searchTerm) {
+          return this.allCategories[i].category_id;
+        }
+      }
     }.bind(this));
 
     // add current search term to category list
