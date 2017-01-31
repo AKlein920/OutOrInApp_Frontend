@@ -91,7 +91,7 @@ if (localStorage.length) {
     this.addRecipe = function() {
       $http({
         method: 'POST',
-        url: this.url + '/users/' + this.user.id + '/recipes',
+        url: this.url + '/users/' + localStorage.userId + '/recipes',
         headers: {
           'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
         },
@@ -118,7 +118,7 @@ if (localStorage.length) {
     this.editRecipe = function(id) {
       $http({
         method: 'PUT',
-        url: this.url + '/users/' + this.user.id + '/recipes/' + id,
+        url: this.url + '/users/' + localStorage.userId + '/recipes/' + id,
         headers: {
           'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
         },
@@ -136,7 +136,11 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
-      });
+      },
+      function(response) {
+        console.log(response);
+      }
+    );
     };
 
     // Function to delete a recipe:
@@ -147,7 +151,7 @@ if (localStorage.length) {
     this.deleteRecipe = function(id) {
       $http({
         method: 'DELETE',
-        url: this.url + '/users/' + this.user.id + '/recipes/' + id,
+        url: this.url + '/users/' + localStorage.userId + '/recipes/' + id,
         headers: {
           'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
         }
