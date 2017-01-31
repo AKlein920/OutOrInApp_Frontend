@@ -93,7 +93,6 @@
           <p>Ingredients: {{recipe.ingredients}}</p>
           <p>Directions: {{recipe.directions}}</p>
           <p>Difficulty: {{recipe.difficulty}}</p>
-          <button type="button" data-toggle='modal' data-target='#editModal'>Edit Recipe</button>
 
           <form ng-submit='ctrl.editRecipe(recipe.id);'>
             <input type="text" ng-model='ctrl.editRecipeData.name' placeholder="{{recipe.name}}"/>

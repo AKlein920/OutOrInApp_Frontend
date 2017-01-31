@@ -140,8 +140,7 @@ if (localStorage.length) {
       },
       function(response) {
         console.log(response);
-      }
-    );
+      });
     };
 
     // Function to delete a recipe:
