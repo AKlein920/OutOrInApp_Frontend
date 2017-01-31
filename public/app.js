@@ -3,7 +3,7 @@ var app = angular.module("FoodApp", []);
 app.controller('foodController', ['$http', function($http) {
 
 // app URL(local at this time - must change to Heroku)
-this.url = 'https://out-or-in-app--api.herokuapp.com/';
+this.url = 'https://out-or-in-app--api.herokuapp.com';
 this.user = {};
 this.newRecipeData = {};
 this.editRecipeData = {};
