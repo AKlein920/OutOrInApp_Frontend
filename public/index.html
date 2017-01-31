@@ -13,109 +13,152 @@
   </head>
   <body ng-controller='foodController as ctrl'>
 
-    <!-- Sign Up -->
-    <div class="">
-      <h2>Sign Up</h2>
-      <form ng-submit='ctrl.signUp();'>
-        <input type="text" ng-model='ctrl.signUpData.username' placeholder='Username'>
-        <input type="text" ng-model='ctrl.signUpData.password' placeholder="Password">
-        <input type="submit" value="Sign Up">
-      </form>
-      <p ng-if='ctrl.signedUp'>All signed up. Now log in!</p>
-    </div>
+    <div class="container">
 
-    <!-- login -->
-    <div class="">
-      <h2>Log In</h2>
-      <form ng-submit='ctrl.login();'>
-        <input type="text" ng-model='ctrl.signIn.username' placeholder='Username'>
-        <input type="text" ng-model='ctrl.signIn.password' placeholder="Password">
-        <input type="submit" name="" value="Log In">
-      </form>
+      <header>
 
-      <p ng-if='ctrl.wrongPassword'>{{ctrl.message}}</p>
+      </header>
 
-      <!-- logout button -->
-      <button type="submit" ng-click='ctrl.logout();'>Log Out</button>
-      <button ng-if='ctrl.loggedIn' type="button" ng-click='ctrl.deleteMyAccount();'>Delete My Account</button>
-    </div>
-
-    <p ng-if='ctrl.loggedIn'>Welcome, {{ctrl.myName}}!</p>
-
-    <button type="button" ng-if='ctrl.loggedIn' ng-click='ctrl.showAllRecipes();' name="button">See all my recipes</button>
-
-    <p ng-if='ctrl.prompt'>You don't have any recipes saved yet. Add some below!</p>
-
-    <div ng-if='ctrl.show'>
-      <div ng-repeat='recipe in ctrl.myRecipes track by recipe.id'>
-        <h4>{{recipe.name}}</h4>
-        <p>Ingredients: {{recipe.ingredients}}</p>
-        <p>Directions: {{recipe.directions}}</p>
-        <p>Difficulty: {{recipe.difficulty}}</p>
-        <button type="button" data-toggle='modal' data-target='#editModal'>Edit Recipe</button>
-
-        <!-- Edit Recipe Modal -->
-      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal">
-        <div class="modal-dialog" role="document">
+      <nav>
+        <ul>
+          <li data-toggle='modal' data-target='#signUpModal'>Sign Up</li>
+          <li data-toggle='modal' data-target='#logInModal'>Log In</li>
+          <li>Log Out</li>
+          <li>My Recipes</li>
+          <li>My Account</li>
+        </ul>
+      </nav>
+      <!-- Sign Up Modal -->
+      <div class="modal fade" id='signUpModal' tabindex="-1" role='dialog' aria-labelledby='signUpModalLabel' aria-hidden='true'>
+        <div class="modal-dialog" role='document'>
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="editModal">Edit Recipe</h4>
-          </div>
-          <div class="modal-body">
-            <form ng-submit='ctrl.editRecipe(recipe.id);'>
-              <input type="text" ng-model='ctrl.editRecipeData.name' placeholder="{{recipe.name}}"/>
-              <input type="text" ng-model='ctrl.editRecipeData.url' placeholder="{{recipe.url}}"/>
-              <input type="text" ng-model='ctrl.editRecipeData.img_url' placeholder="{{recipe.img_url}}"/>
-              <input type="text" ng-model='ctrl.editRecipeData.ingredients' placeholder="{{recipe.ingredients}}"/>
-              <input type="text" ng-model='ctrl.editRecipeData.directions' placeholder="{{recipe.directions}}"/>
-              <input type="text" ng-model='ctrl.editRecipeData.difficulty' placeholder="{{recipe.difficulty}}"/>
-              <!-- Meal should be a select with options -->
-              <input type="text" ng-model='ctrl.editRecipeData.meal' placeholder="{{recipe.meal}}"/>
-              <!-- Serving Size should be a select with options for numbers -->
-              <input type="text" ng-model='ctrl.editRecipeData.serving_size' placeholder="{{recipe.serving_size}}"/>
-              <!-- Cuisine should probably be a drop-down -->
-              <input type="text" ng-model='ctrl.editRecipeData.cuisine' placeholder="{{recipe.cuisine}}"/>
-              <input type="text" ng-model='ctrl.editRecipeData.time_to_make' placeholder="{{recipe.time_to_make}}"/>
-              <input type="submit" value="Edit Recipe"/>
-            </form>
+              <h1 class='modal-title' id="signUpModalLabel">Sign Up</h1>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" ng-click='ctrl.IAmSure();' class="btn btn-default">Delete Recipe</button>
-            <p ng-if='ctrl.areYouSure'>
-              Are You Sure? <button type="button" ng-click='ctrl.deleteRecipe(recipe.id);' data-dismiss="modal">Yes, Delete Recipe</button>
-            </p>
-            <button type="button" data-dismiss='modal'>Close</button>
+            <div class="modal-body">
+              <form ng-submit='ctrl.signUp();'>
+                <input type="text" ng-model='ctrl.signUpData.username' placeholder='Username'>
+                <input type="text" ng-model='ctrl.signUpData.password' placeholder="Password">
+                <input type="submit" value="Sign Up">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <p ng-if='ctrl.signedUp'>All signed up. Now log in!</p>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Log In Modal -->
+      <div class="modal fade" id='logInModal' tabindex="-1" role='dialog' aria-labelledby='logInModalLabel' aria-hidden='true'>
+        <div class="modal-dialog" role='document'>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class='modal-title' id="logInModalLabel">Log In</h1>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form ng-submit='ctrl.login();'>
+                <input type="text" ng-model='ctrl.signIn.username' placeholder='Username'>
+                <input type="text" ng-model='ctrl.signIn.password' placeholder="Password">
+                <input type="submit" value="Log In">
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <p ng-if='ctrl.loggedIn'></p>
+              <p ng-if='ctrl.wrongPassword'>{{ctrl.message}}</p>
+            </div>
+          </div>
+        </div>
       </div>
+
+        <!-- logout button -->
+        <button type="submit" ng-click='ctrl.logout();'>Log Out</button>
+        <button ng-if='ctrl.loggedIn' type="button" ng-click='ctrl.deleteMyAccount();'>Delete My Account</button>
+
+      <h1 ng-if='ctrl.loggedIn'>Welcome, {{ctrl.myName}}!</h1>
+
+      <button type="button" ng-if='ctrl.loggedIn' ng-click='ctrl.showAllRecipes();' name="button">See all my recipes</button>
+
+      <p ng-if='ctrl.prompt'>You don't have any recipes saved yet. Add some below!</p>
+
+      <div ng-if='ctrl.show'>
+        <div ng-repeat='recipe in ctrl.myRecipes track by recipe.id'>
+          <h4>{{recipe.name}}</h4>
+          <p>Ingredients: {{recipe.ingredients}}</p>
+          <p>Directions: {{recipe.directions}}</p>
+          <p>Difficulty: {{recipe.difficulty}}</p>
+          <button type="button" data-toggle='modal' data-target='#editModal'>Edit Recipe</button>
+
+          <!-- Edit Recipe Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="editModal">Edit Recipe</h4>
+            </div>
+            <div class="modal-body">
+              <form ng-submit='ctrl.editRecipe(recipe.id);'>
+                <input type="text" ng-model='ctrl.editRecipeData.name' placeholder="{{recipe.name}}"/>
+                <input type="text" ng-model='ctrl.editRecipeData.url' placeholder="{{recipe.url}}"/>
+                <input type="text" ng-model='ctrl.editRecipeData.img_url' placeholder="{{recipe.img_url}}"/>
+                <input type="text" ng-model='ctrl.editRecipeData.ingredients' placeholder="{{recipe.ingredients}}"/>
+                <input type="text" ng-model='ctrl.editRecipeData.directions' placeholder="{{recipe.directions}}"/>
+                <input type="text" ng-model='ctrl.editRecipeData.difficulty' placeholder="{{recipe.difficulty}}"/>
+                <!-- Meal should be a select with options -->
+                <input type="text" ng-model='ctrl.editRecipeData.meal' placeholder="{{recipe.meal}}"/>
+                <!-- Serving Size should be a select with options for numbers -->
+                <input type="text" ng-model='ctrl.editRecipeData.serving_size' placeholder="{{recipe.serving_size}}"/>
+                <!-- Cuisine should probably be a drop-down -->
+                <input type="text" ng-model='ctrl.editRecipeData.cuisine' placeholder="{{recipe.cuisine}}"/>
+                <input type="text" ng-model='ctrl.editRecipeData.time_to_make' placeholder="{{recipe.time_to_make}}"/>
+                <input type="submit" value="Edit Recipe"/>
+              </form>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" ng-click='ctrl.IAmSure();' class="btn btn-default">Delete Recipe</button>
+              <p ng-if='ctrl.areYouSure'>
+                Are You Sure? <button type="button" ng-click='ctrl.deleteRecipe(recipe.id);' data-dismiss="modal">Yes, Delete Recipe</button>
+              </p>
+              <button type="button" data-dismiss='modal'>Close</button>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+
+    <!-- Add a new recipe: -->
+    <div ng-if='ctrl.loggedIn'>
+      <h2>Add A New Recipe</h2>
+      <form ng-submit='ctrl.addRecipe();'>
+        <input type="text" ng-model='ctrl.newRecipeData.name' placeholder="Title"/>
+        <input type="text" ng-model='ctrl.newRecipeData.url' placeholder="URL"/>
+        <input type="text" ng-model='ctrl.newRecipeData.img_url' placeholder="Image URL"/>
+        <input type="text" ng-model='ctrl.newRecipeData.ingredients' placeholder="Ingredients"/>
+        <input type="text" ng-model='ctrl.newRecipeData.directions' placeholder="Directions"/>
+        <input type="text" ng-model='ctrl.newRecipeData.difficulty' placeholder="Difficulty"/>
+        <!-- Meal should be a select with options -->
+        <input type="text" ng-model='ctrl.newRecipeData.meal' placeholder="Meal"/>
+        <!-- Serving Size should be a select with options for numbers -->
+        <input type="text" ng-model='ctrl.newRecipeData.serving_size' placeholder="Serving Size"/>
+        <!-- Cuisine should probably be a drop-down -->
+        <input type="text" ng-model='ctrl.newRecipeData.cuisine' placeholder="Cuisine"/>
+        <input type="text" ng-model='ctrl.newRecipeData.time_to_make' placeholder="Time to Make (in minutes)"/>
+        <input type="submit" value="Submit"/>
+      </form>
     </div>
 
 
+    </div>
 
-  <!-- Add a new recipe: -->
-  <div ng-if='ctrl.loggedIn'>
-    <h2>Add A New Recipe</h2>
-    <form ng-submit='ctrl.addRecipe();'>
-      <input type="text" ng-model='ctrl.newRecipeData.name' placeholder="Title"/>
-      <input type="text" ng-model='ctrl.newRecipeData.url' placeholder="URL"/>
-      <input type="text" ng-model='ctrl.newRecipeData.img_url' placeholder="Image URL"/>
-      <input type="text" ng-model='ctrl.newRecipeData.ingredients' placeholder="Ingredients"/>
-      <input type="text" ng-model='ctrl.newRecipeData.directions' placeholder="Directions"/>
-      <input type="text" ng-model='ctrl.newRecipeData.difficulty' placeholder="Difficulty"/>
-      <!-- Meal should be a select with options -->
-      <input type="text" ng-model='ctrl.newRecipeData.meal' placeholder="Meal"/>
-      <!-- Serving Size should be a select with options for numbers -->
-      <input type="text" ng-model='ctrl.newRecipeData.serving_size' placeholder="Serving Size"/>
-      <!-- Cuisine should probably be a drop-down -->
-      <input type="text" ng-model='ctrl.newRecipeData.cuisine' placeholder="Cuisine"/>
-      <input type="text" ng-model='ctrl.newRecipeData.time_to_make' placeholder="Time to Make (in minutes)"/>
-      <input type="submit" value="Submit"/>
-    </form>
-  </div>
 
   </body>
 </html>
