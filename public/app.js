@@ -120,7 +120,8 @@ if (localStorage.length) {
         method: 'PUT',
         url: this.url + '/users/' + localStorage.userId + '/recipes/' + id,
         headers: {
-          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token')),
+          'Access-Control-Allow-Credentials': true
         },
         data: {
           name: this.editRecipeData.name,
