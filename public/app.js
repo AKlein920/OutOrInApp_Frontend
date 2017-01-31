@@ -9,6 +9,13 @@ this.user = {};
 this.newRecipeData = {};
 this.editRecipeData = {};
 this.myRecipes = [];
+this.prompt = false;
+this.myName = localStorage.username;
+this.wrongPassword = false;
+
+if (localStorage.length) {
+  this.loggedIn = true;
+}
 
   ///// Function to Sign Up:
   this.signUpData = {};
@@ -27,7 +34,7 @@ this.myRecipes = [];
   }
 
   ///// Function to Log In:
-  this.loggedIn = false;
+  // this.loggedIn = false;
   this.signIn = {};
   this.login = function() {
     $http({
@@ -35,19 +42,30 @@ this.myRecipes = [];
       url: this.url + '/users/login',
       data: {user: {username: this.signIn.username, password: this.signIn.password}}
     }).then(function(response) {
-      console.log(response);
-      this.user = response.data.user;
-      localStorage.setItem('token', JSON.stringify(response.data.token))
-      console.log(this.user.id);
-      this.signIn = {};
-      this.loggedIn = true;
+      console.log(response.data);
+      if (response.data.status === 401) {
+        this.wrongPassword = true;
+        this.message = 'Incorrect username or password';
+      } else {
+        this.user = response.data.user;
+        localStorage.setItem('token', JSON.stringify(response.data.token));
+        localStorage.setItem('userId', JSON.stringify(response.data.user.id));
+        localStorage.setItem('username', JSON.stringify(response.data.user.username))
+        this.myName = localStorage.username;
+        this.signIn = {};
+        this.loggedIn = true;
+        this.wrongPassword = false;
+      }
     }.bind(this));
   }
 
   ///// Function to Log Out:
   this.logout = function() {
     localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('username')
     this.loggedIn = false;
+    this.show = false;
     this.user = null;
   }
 
@@ -57,13 +75,16 @@ this.myRecipes = [];
       this.show = true;
       $http({
         method: 'GET',
-        url: this.url + '/users/' + this.user.id + '/recipes',
+        url: this.url + '/users/' + localStorage.userId + '/recipes',
         headers: {
           'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
         }
       }).then(function(response) {
         console.log(response.data);
         this.myRecipes = response.data;
+        if (this.myRecipes.length == 0) {
+          this.prompt = true;
+        }
       }.bind(this));
     };
 
@@ -90,7 +111,8 @@ this.myRecipes = [];
         }
       }).then(function(response) {
         console.log(response.data);
-      });
+        this.prompt = false;
+      }.bind(this));
     };
 
     // Function to edit a recipe:
@@ -135,41 +157,18 @@ this.myRecipes = [];
       })
     }
 
-  // Function to add a recipe to the db:
-  // this.addRecipe = function(index) {
-  //   $http({
-  //     method: 'POST',
-  //     url: 'http://localhost:3000/categories/' + this.recipeGroup[index].category_id + '/recipes',
-  //     data: { recipe: this.recipeGroup[index] }
-  //   }).then(function(response) {
-  //     console.log('adding recipe');
-  //     console.log(response);
-  //   }.bind(this));
-  // }
-
-  // Function to delete recipe:
-  // this.deleteRecipe = function(index) {
-  //   $http({
-  //     method: 'DELETE',
-  //     url: 'http://localhost:3000/categories/' + this.categoryRecipes[index].category_id + '/recipes/' + this.categoryRecipes[index].id
-  //   }).then(function(response) {
-  //     console.log('deleting recipe');
-  //   }.bind(this));
-  // }
-
-  // Function to edit a category:
-  // this.editCategory = function(index) {
-  //   $http({
-  //     method: 'PUT',
-  //     url: 'http://localhost:3000/categories/' + this.categories[index].id,
-  //     data: {
-  //       name: this.editCategoryData.name,
-  //       description: this.editCategoryData.description
-  //     }
-  //   }).then(function(response) {
-  //     console.log('editing category');
-  //     console.log(response.data);
-  //   }.bind(this));
-  // }
+  // Function to delete user account:
+  this.deleteMyAccount = function() {
+    $http({
+      method: 'DELETE',
+      url: this.url + '/users/' + localStorage.userId,
+      headers: {
+        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+      }
+    }).then(function(response) {
+      console.log(response);
+      this.logout();
+    }.bind(this));
+  };
 
 }]); // end app controller
