@@ -2,13 +2,20 @@ var app = angular.module("FoodApp", []);
 
 app.controller('foodController', ['$http', function($http) {
 
+// app URL(local at this time - must change to Heroku)
+this.url = 'http://localhost:3000';
+this.user = {};
+this.newRecipeData = {};
+this.editRecipeData = {};
+this.myRecipes = [];
+
   ///// Function to Sign Up:
   this.signUpData = {};
   this.signedUp = false;
   this.signUp = function() {
     $http({
       method: 'POST',
-      url: 'http://localhost:3000/users',
+      url: this.url + '/users',
       data: {user: {username: this.signUpData.username, password: this.signUpData.password}}
     }).then(function(response) {
       console.log('signing up');
@@ -24,14 +31,13 @@ app.controller('foodController', ['$http', function($http) {
   this.login = function() {
     $http({
       method: 'POST',
-      url: 'http://localhost:3000/users/login',
+      url: this.url + '/users/login',
       data: {user: {username: this.signIn.username, password: this.signIn.password}}
     }).then(function(response) {
-      console.log('loggin in');
       console.log(response);
-      this.currentUser = response.data.user;
+      this.user = response.data.user;
       localStorage.setItem('token', JSON.stringify(response.data.token))
-      console.log(this.currentUser);
+      console.log(this.user.id);
       this.signIn = {};
       this.loggedIn = true;
     }.bind(this));
@@ -41,149 +47,128 @@ app.controller('foodController', ['$http', function($http) {
   this.logout = function() {
     localStorage.removeItem('token')
     this.loggedIn = false;
-    this.currentUser = null;
+    this.user = null;
   }
 
-  this.recipeGroup = [];
-  this.categories = [];
-  this.categoryRecipes = [];
+  // Function to see user's recipes:
+    this.show = false;
+    this.showAllRecipes = function() {
+      this.show = true;
+      $http({
+        method: 'GET',
+        url: this.url + '/users/' + this.user.id + '/recipes',
+        headers: {
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        }
+      }).then(function(response) {
+        console.log(response.data);
+        this.myRecipes = response.data;
+      }.bind(this));
+    };
 
-  // function to pull all categories from rails API:
-    $http({
-      method: 'GET',
-      url: 'http://localhost:3000/categories'
-    }).then(function(response) {
-      // console.log(response);
-      // console.log(response.data);
-      this.categories = response.data;
-      console.log(this.categories);
-    }.bind(this));
-
-  // function to show all of that category's recipes:
-  this.showRecipesByCategory = function(index) {
-    $http({
-      method: 'GET',
-      url: 'http://localhost:3000/categories/' + this.categories[index].id + '/recipes'
-    }).then(function(response) {
-      console.log(response.data);
-      this.categoryRecipes = response.data;
-    }.bind(this));
-  }
-
-  this.key = '4674c93fb8691a3cc6c841773dc368e4';
-  this.searchTerm = '';
-
-  // Function to populate results from API:
-  this.query = function() {
-    this.searchTerm = this.searchTerm.toLowerCase();
-
-    // // get all categories:
-    // $http({
-    //   method: 'GET',
-    //   url: 'http://localhost:3000/categories'
-    // }).then(function(response) {
-    //   this.categories = response.data;
-    // }.bind(this));
-
-    // check for duplicate search terms
-    var categories = this.categories.map(function(category) {
-      return category.name;
-    });
-
-    if (categories.includes(this.searchTerm)) {
-      // write function that calls the next page of that category
-      console.log('This category already exists');
-      // update existing category
-      // Function to add a recipe to the db:
-        // get category id
-        $http({
-          method: 'GET',
-          url: 'http://localhost:3000/categories'
-        }).then(function(response) {
-          console.log(response.data);
-        });
-      // this.addRecipe = function(index) {
-      //   $http({
-      //     method: 'POST',
-      //     url: 'http://localhost:3000/categories/' + this.recipeGroup[index].category_id + '/recipes',
-      //     data: { recipe: this.recipeGroup[index] }
-      //   }).then(function(response) {
-      //     console.log('adding recipe');
-      //     console.log(response);
-      //   }.bind(this));
-      // }
-    } else {
-      console.log('New category: ', this.searchTerm);
+    // Function to add a new recipe to a user's collection:
+    this.addRecipe = function() {
       $http({
         method: 'POST',
-        url: 'http://localhost:3000/categories',
+        url: this.url + '/users/' + this.user.id + '/recipes',
+        headers: {
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        },
         data: {
-          name: this.searchTerm,
-          description: this.searchTerm
+          name: this.newRecipeData.name,
+          url: this.newRecipeData.url,
+          img_url: this.newRecipeData.img_url,
+          user_id: this.user.id,
+          ingredients: this.newRecipeData.ingredients,
+          directions: this.newRecipeData.directions,
+          difficulty: this.newRecipeData.difficulty,
+          meal: this.newRecipeData.meal,
+          serving_size: this.newRecipeData.serving_size,
+          cuisine: this.newRecipeData.cuisine,
+          time_to_make: this.newRecipeData.time_to_make
+        }
+      }).then(function(response) {
+        console.log(response.data);
+      });
+    };
+
+    // Function to edit a recipe:
+    this.editRecipe = function(id) {
+      $http({
+        method: 'PUT',
+        url: this.url + '/users/' + this.user.id + '/recipes/' + id,
+        headers: {
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        },
+        data: {
+          name: this.editRecipeData.name,
+          url: this.editRecipeData.url,
+          img_url: this.editRecipeData.img_url,
+          ingredients: this.editRecipeData.ingredients,
+          directions: this.editRecipeData.directions,
+          difficulty: this.editRecipeData.difficulty,
+          meal: this.editRecipeData.meal,
+          serving_size: this.editRecipeData.serving_size,
+          cuisine: this.editRecipeData.cuisine,
+          time_to_make: this.editRecipeData.time_to_make
+        }
+      }).then(function(response) {
+        console.log(response.data);
+      });
+    };
+
+    // Function to delete a recipe:
+    this.areYouSure = false;
+    this.IAmSure = function() {
+      this.areYouSure = true;
+    }
+    this.deleteRecipe = function(id) {
+      $http({
+        method: 'DELETE',
+        url: this.url + '/users/' + this.user.id + '/recipes/' + id,
+        headers: {
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
         }
       }).then(function(response) {
         console.log(response);
-        categoryId = response.data.id;
-      }.bind(this));
+      })
     }
 
-
-      // get recipes from API:
-      $http({
-        method: 'GET',
-        url: 'http://food2fork.com/api/search?key=' + this.key + '&q=' + this.searchTerm
-      }).then(function(response) {
-        console.log(response.data);
-        // console.log(response.data.recipes);
-        this.recipeGroup = response.data.recipes.map(function (recipeObj) {
-          var rObj = {};
-          rObj['name'] = recipeObj.title;
-          rObj['img_url'] = recipeObj.image_url;
-          rObj['url'] = recipeObj.source_url;
-          rObj['category_id'] = categoryId;
-          return rObj;
-        });
-        // console.log(this.recipeGroup);
-        // this returns a maximum of 30 recipes; could put in a shuffle function to shuffle the array and display in random order instead of same order every time?
-      }.bind(this));
-    } /////////// END this.query function
-
-
   // Function to add a recipe to the db:
-  this.addRecipe = function(index) {
-    $http({
-      method: 'POST',
-      url: 'http://localhost:3000/categories/' + this.recipeGroup[index].category_id + '/recipes',
-      data: { recipe: this.recipeGroup[index] }
-    }).then(function(response) {
-      console.log('adding recipe');
-      console.log(response);
-    }.bind(this));
-  }
+  // this.addRecipe = function(index) {
+  //   $http({
+  //     method: 'POST',
+  //     url: 'http://localhost:3000/categories/' + this.recipeGroup[index].category_id + '/recipes',
+  //     data: { recipe: this.recipeGroup[index] }
+  //   }).then(function(response) {
+  //     console.log('adding recipe');
+  //     console.log(response);
+  //   }.bind(this));
+  // }
 
   // Function to delete recipe:
-  this.deleteRecipe = function(index) {
-    $http({
-      method: 'DELETE',
-      url: 'http://localhost:3000/categories/' + this.categoryRecipes[index].category_id + '/recipes/' + this.categoryRecipes[index].id
-    }).then(function(response) {
-      console.log('deleting recipe');
-    }.bind(this));
-  }
+  // this.deleteRecipe = function(index) {
+  //   $http({
+  //     method: 'DELETE',
+  //     url: 'http://localhost:3000/categories/' + this.categoryRecipes[index].category_id + '/recipes/' + this.categoryRecipes[index].id
+  //   }).then(function(response) {
+  //     console.log('deleting recipe');
+  //   }.bind(this));
+  // }
 
   // Function to edit a category:
-  this.editCategory = function(index) {
-    $http({
-      method: 'PUT',
-      url: 'http://localhost:3000/categories/' + this.categories[index].id,
-      data: {
-        name: this.editCategoryData.name,
-        description: this.editCategoryData.description
-      }
-    }).then(function(response) {
-      console.log('editing category');
-      console.log(response.data);
-    }.bind(this));
-  }
+  // this.editCategory = function(index) {
+  //   $http({
+  //     method: 'PUT',
+  //     url: 'http://localhost:3000/categories/' + this.categories[index].id,
+  //     data: {
+  //       name: this.editCategoryData.name,
+  //       description: this.editCategoryData.description
+  //     }
+  //   }).then(function(response) {
+  //     console.log('editing category');
+  //     console.log(response.data);
+  //   }.bind(this));
+  // }
 
 }]); // end app controller
