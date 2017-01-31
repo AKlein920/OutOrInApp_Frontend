@@ -33,13 +33,18 @@
         <input type="submit" name="" value="Log In">
       </form>
 
+      <p ng-if='ctrl.wrongPassword'>{{ctrl.message}}</p>
+
       <!-- logout button -->
       <button type="submit" ng-click='ctrl.logout();'>Log Out</button>
+      <button ng-if='ctrl.loggedIn' type="button" ng-click='ctrl.deleteMyAccount();'>Delete My Account</button>
     </div>
 
-    <p ng-if='ctrl.loggedIn'>Welcome, {{ctrl.user.username}}!</p>
+    <p ng-if='ctrl.loggedIn'>Welcome, {{ctrl.myName}}!</p>
 
-    <button type="button" ng-click='ctrl.showAllRecipes();' name="button">See all my recipes</button>
+    <button type="button" ng-if='ctrl.loggedIn' ng-click='ctrl.showAllRecipes();' name="button">See all my recipes</button>
+
+    <p ng-if='ctrl.prompt'>You don't have any recipes saved yet. Add some below!</p>
 
     <div ng-if='ctrl.show'>
       <div ng-repeat='recipe in ctrl.myRecipes track by recipe.id'>
