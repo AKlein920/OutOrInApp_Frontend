@@ -27,6 +27,9 @@ This full CRUD application uses Ruby on Rails as the backend with an angular fro
    - Bootstrap
    - Authentication with Javascript Web Tokens
    
-   
+## Approach 
+
+## Unsolved problems & Further Improvements
+- We would like to implement at least one third-party API in the future. 
    
    
