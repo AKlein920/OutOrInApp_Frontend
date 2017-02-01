@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Patrick+Hand+SC" rel="stylesheet">
     <script type="text/javascript" src='app.js'></script>
     <base href="/"/>
     <title></title>
@@ -23,9 +24,9 @@
         <ul class="nav nav-pills nav-justified">
           <li class='nav-item' data-toggle='modal' data-target='#signUpModal'>Sign Up</li>
           <li class='nav-item' data-toggle='modal' data-target='#logInModal'>Log In</li>
-          <li class='nav-item'>Log Out</li>
-          <li class='nav-item'>My Recipes</li>
-          <li class='nav-item'>My Account</li>
+          <li class='nav-item' ng-click='ctrl.logout();'>Log Out</li>
+          <li class='nav-item' ng-if='ctrl.loggedIn' ng-click='ctrl.showAllRecipes();'>My Recipes</li>
+          <li class='nav-item' ng-if='ctrl.loggedIn' ng-click='ctrl.deleteMyAccount();'>Delete My Account</li>
         </ul>
       </nav>
       <!-- Sign Up Modal -->
@@ -77,10 +78,6 @@
         </div>
       </div>
 
-        <!-- logout button -->
-        <button class="btn btn-default" type="submit" ng-click='ctrl.logout();'>Log Out</button>
-        <button  class="btn btn-default" ng-if='ctrl.loggedIn' type="button" ng-click='ctrl.deleteMyAccount();'>Delete My Account</button>
-
       <h1 ng-if='ctrl.loggedIn'>Welcome, {{ctrl.myName}}!</h1>
 
       <button type="button" class="btn btn-default" ng-if='ctrl.loggedIn' ng-click='ctrl.showAllRecipes();' name="button">See All Recipes</button>
@@ -89,13 +86,14 @@
 
       <div ng-if='ctrl.show'>
         <div ng-repeat='recipe in ctrl.myRecipes track by recipe.id'>
-          <img ng-src="{{recipe.img_url}}" alt="Recipe Image">
+          <img data-toggle='modal' data-target='#viewRecipeModal' ng-click='ctrl.viewRecipe(recipe.id);' ng-src="{{recipe.img_url}}" alt="Recipe Image">
           <h4>{{recipe.name}}</h4>
+          <p>Meal: {{recipe.difficulty}}</p>
           <p>Difficulty: {{recipe.difficulty}}</p>
           <p>Ingredients: {{recipe.ingredients}}</p>
           <p>Directions: {{recipe.directions}}</p>
 
-
+        <!-- Edit recipe form -->
           <form ng-submit='ctrl.editRecipe(recipe.id);'>
             <input type="text" ng-model='ctrl.editRecipeData.name' placeholder="{{recipe.name}}"/>
             <input type="text" ng-model='ctrl.editRecipeData.url' placeholder="{{recipe.url}}"/>
@@ -120,8 +118,30 @@
         </div>
       </div>
 
+      <!-- view recipe modal -->
+      <div class="modal fade" id='viewRecipeModal' tabindex="-1" role='dialog' aria-labelledby='viewRecipeModalLabel' aria-hidden='true'>
+        <div class="modal-dialog" role='document'>
+          <div class="modal-content">
+            <div class="modal-header">
+              <a href='{{ctrl.viewRecipeData[0].url}}'><h1 class='modal-title' id="viewRecipeModalLabel">{{ctrl.viewRecipeData[0].name}}</h1></a>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Ingredients: {{ctrl.viewRecipeData[0].ingredients}}</p>
+              <p>Directions: {{ctrl.viewRecipeData[0].directions}}</p>
+              <p>Time to Make: {{ctrl.viewRecipeData[0].time_to_make}}</p>
+              <p>Serves: {{ctrl.viewRecipeData[0].serving_size}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <!-- Add a new recipe: -->
-    <div ng-if='ctrl.loggedIn'>
+    <div ng-if='ctrl.loggedIn' class='new-recipe-form'>
       <h2>Add A New Recipe</h2>
       <form ng-submit='ctrl.addRecipe();'>
         <input type="text" ng-model='ctrl.newRecipeData.name' placeholder="Title"/>
@@ -140,7 +160,8 @@
     </div>
 
 
-    </div>
+  </div>
+  <!-- End container -->
 
 
   </body>

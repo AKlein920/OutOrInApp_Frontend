@@ -3,8 +3,8 @@ var app = angular.module("FoodApp", []);
 app.controller('foodController', ['$http', function($http) {
 
 // app URL(local at this time - must change to Heroku)
-// this.url = 'localhost:3000';
-this.url = 'https://out-or-in-app--api.herokuapp.com';
+this.url = 'http://localhost:3000';
+// this.url = 'https://out-or-in-app--api.herokuapp.com';
 this.user = {};
 this.newRecipeData = {};
 this.editRecipeData = {};
@@ -50,7 +50,7 @@ if (localStorage.length) {
         this.user = response.data.user;
         localStorage.setItem('token', JSON.stringify(response.data.token));
         localStorage.setItem('userId', JSON.stringify(response.data.user.id));
-        localStorage.setItem('username', JSON.stringify(response.data.user.username))
+        localStorage.setItem('username', response.data.user.username.toString());
         this.myName = localStorage.username;
         this.signIn = {};
         this.loggedIn = true;
@@ -67,6 +67,7 @@ if (localStorage.length) {
     this.loggedIn = false;
     this.show = false;
     this.user = null;
+    this.prompt = false;
   }
 
   // Function to see user's recipes:
@@ -111,9 +112,25 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
+        this.myRecipes.push(this.newRecipeData);
         this.prompt = false;
       }.bind(this));
     };
+
+    // Function to view individual recipe:
+    this.viewRecipe = function(id) {
+      $http({
+        method: 'GET',
+        url: this.url + '/users/' + localStorage.userId + '/recipes/' + id,
+        headers: {
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        }
+      }).then(function(response) {
+        // console.log(response.data);
+        this.viewRecipeData = response.data;
+        console.log(this.viewRecipeData);
+      }.bind(this));
+    }
 
     // Function to edit a recipe:
     this.editRecipe = function(id) {
@@ -140,9 +157,10 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
+        //ToDo: update recipes array with new data
       },
       function(response) {
-        console.log(response);
+        console.error(response);
       });
     };
 
@@ -160,7 +178,7 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response);
-      })
+      }.bind(this));
     }
 
   // Function to delete user account:
