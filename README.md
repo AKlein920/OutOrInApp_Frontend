@@ -1,5 +1,6 @@
 # [OutOrInApp](https://out-or-in-app--frontend.herokuapp.com/)
 
+This full CRUD application uses Ruby on Rails as the backend with an angular front end. The backend repository can be found [here](https://github.com/smtlb/OutOrInApp_API/), and the backend hosted website can be found [here](https://out-or-in-app--api.herokuapp.com/).
 
 ## User Stories
 
@@ -13,3 +14,19 @@
   
 
 - [x] When the user adds a recipe, the user is returned with the recipe, a form under it with the recipe's values as placeholders, and two buttons: one for updating and one for deleting. 
+
+## Technologies Used
+
+   - JavaScript   
+   - AngularJS
+   - Postgres
+   - Ruby and Ruby Gems
+   - Ruby on Rails
+   - NodeJS
+   - CORS configuration
+   - Bootstrap
+   - Authentication with Javascript Web Tokens
+   
+   
+   
+   
