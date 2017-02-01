@@ -59,4 +59,6 @@ li {
 form.ng-pristine,  {
   float: right;
   margin-bottom: 3%;
+  margin: 0 auto;
+  text-align: center;
 }
