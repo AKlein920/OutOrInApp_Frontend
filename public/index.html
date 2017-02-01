@@ -110,9 +110,7 @@
             <input type="submit"  class="btn btn-default"  class="btn btn-default" class="btn btn-default" value="Edit Recipe">
           </form>
 
-              <button type="button" ng-click='ctrl.IAmSure();' class="btn btn-default">Delete Recipe</button>
-              <p ng-if='ctrl.areYouSure'>
-                Are You Sure? <button class="btn btn-default" type="button" ng-click='ctrl.deleteRecipe(recipe.id);' data-dismiss="modal">Yes, Delete Recipe</button>
+              <button class="btn btn-default" type="button" ng-click='ctrl.deleteRecipe(recipe.id);'>Delete Recipe</button>
               </p>
 
         </div>
