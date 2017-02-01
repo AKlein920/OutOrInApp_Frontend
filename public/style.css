@@ -45,6 +45,39 @@ div.ng-repeat {
   float: right;
 }
 
+.grid-item {
+  display: inline-block;
+  text-align: center;
+  background: gray;
+  border-radius: 5%;
+  margin: 1%;
+  height: 400px;
+  width: 250px;
+}
+
+.img-holder {
+  text-align: center;
+  height: 40%;
+  width: 95%;
+}
+
+.img-holder:hover {
+  z-index: 0;
+  cursor: pointer;
+  opacity: .5;
+  border-radius: 5%;
+  background: #66888e;
+  box-shadow: 10px 10px 12px -4px;
+}
+
+.grid-item-img {
+  height: auto;
+  max-height: 98%;
+  width: auto;
+  max-width: 100%;
+  margin-top: 2%;
+}
+
 
 li {
   background-image: url("https://www.magnoliabakery.com/wp-content/themes/smpl-magnoliabakery-usa/images/button-bg-115.png");

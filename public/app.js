@@ -112,7 +112,8 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
-        this.myRecipes.push(this.newRecipeData);
+        // this.myRecipes.push(this.newRecipeData);
+        this.newRecipeData = {};
         this.prompt = false;
       }.bind(this));
     };
