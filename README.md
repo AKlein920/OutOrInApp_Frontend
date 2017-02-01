@@ -22,14 +22,16 @@ This full CRUD application uses Ruby on Rails as the backend with an angular fro
    - Postgres
    - Ruby and Ruby Gems
    - Ruby on Rails
-   - NodeJS
+   - NodeJS & Express
    - CORS configuration
    - Bootstrap
-   - Authentication with Javascript Web Tokens
+   - Authentication with JSON Web Tokens & bcrypt
    
 ## Approach 
 
 ## Unsolved problems & Further Improvements
 - We would like to implement at least one third-party API in the future. 
-   
+- We'd also like to implement a "search by type" 
+- We'd like users to opt-in to make their recipes public
+- Automatic updates upon form input
    
