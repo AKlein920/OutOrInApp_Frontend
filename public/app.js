@@ -3,8 +3,8 @@ var app = angular.module("FoodApp", []);
 app.controller('foodController', ['$http', function($http) {
 
 // app URL(local at this time - must change to Heroku)
-// this.url = 'http://localhost:3000';
-this.url = 'https://out-or-in-app--api.herokuapp.com';
+this.url = 'http://localhost:3000';
+// this.url = 'https://out-or-in-app--api.herokuapp.com';
 this.user = {};
 this.newRecipeData = {};
 this.editRecipeData = {};
@@ -112,7 +112,8 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
-        this.myRecipes.push(this.newRecipeData);
+        // this.myRecipes.push(this.newRecipeData);
+        this.newRecipeData = {};
         this.prompt = false;
       }.bind(this));
     };
