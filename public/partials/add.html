@@ -1,0 +1,20 @@
+<!-- Add a new recipe: -->
+<div class='new-recipe-form'>
+  <h2>Add A New Recipe</h2>
+  <form ng-submit='ctrl.addRecipe();'>
+    <input type="text" ng-model='ctrl.newRecipeData.name' placeholder="Title"/>
+    <input type="text" ng-model='ctrl.newRecipeData.url' placeholder="URL"/>
+    <input type="text" ng-model='ctrl.newRecipeData.img_url' placeholder="Image URL"/>
+    <input type="text" ng-model='ctrl.newRecipeData.difficulty' placeholder="Difficulty"/>
+    <input type="text" ng-model='ctrl.newRecipeData.meal' placeholder="Meal">
+    <!-- Serving Size should be a select with options for numbers -->
+    <input type="text" ng-model='ctrl.newRecipeData.serving_size' placeholder="Servings"/>
+    <!-- Cuisine should probably be a drop-down -->
+    <input type="text" ng-model='ctrl.newRecipeData.cuisine' placeholder="Cuisine"/>
+    <input type="text" ng-model='ctrl.newRecipeData.time_to_make' placeholder="Time to Make (in minutes)"/>
+    <input type="text" ng-model='ctrl.newRecipeData.ingredients' placeholder="Ingredients"/>
+    <input type="text" ng-model='ctrl.newRecipeData.directions' placeholder="Directions"/>
+    <input type="submit" class="btn btn-default"  class="btn btn-default" value="Submit"/>
+  </form>
+  <a href='/' class="btn btn-default">Go home</a>
+</div>

@@ -5,11 +5,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Patrick+Hand+SC" rel="stylesheet">
     <script type="text/javascript" src='app.js'></script>
-    <base href="/"/>
+    <base href="/">
     <title></title>
   </head>
   <body ng-controller='foodController as ctrl'>
@@ -25,7 +26,7 @@
           <li class='nav-item' data-toggle='modal' data-target='#signUpModal'>Sign Up</li>
           <li class='nav-item' data-toggle='modal' data-target='#logInModal'>Log In</li>
           <li class='nav-item' ng-click='ctrl.logout();'>Log Out</li>
-          <li class='nav-item' ng-if='ctrl.loggedIn' data-toggle='modal' data-target='#addModal'>Add Recipe</li>
+          <a href='/add'><li class='nav-item' ng-if='ctrl.loggedIn'>Add Recipe</li></a>
           <li class='nav-item' ng-if='ctrl.loggedIn' ng-click='ctrl.deleteMyAccount();'>Delete My Account</li>
         </ul>
       </nav>
@@ -82,107 +83,29 @@
 
       <h1 ng-if='ctrl.loggedIn'>Welcome, {{ctrl.myName}}!</h1>
 
-      <button type="button" class="btn btn-default" ng-if='ctrl.loggedIn' ng-click='ctrl.showAllRecipes();' name="button">See All Recipes</button>
+      <div ng-view></div>
 
       <p ng-if='ctrl.prompt'>You don't have any recipes saved yet. Add some below!</p>
 
-      <div ng-if='ctrl.show'>
-        <div ng-repeat='recipe in ctrl.myRecipes track by recipe.id'>
+      <!-- <div ng-if='ctrl.show'> -->
+      <!-- <h2>Get recipes from internet</h2>
+      <form ng-submit='ctrl.getFood2Fork(ctrl.query)'>
+        <input type="text" ng-model='ctrl.query'>
+        <input type="submit" name="submit" value="submit">
+      </form> -->
 
-          <div class="grid-item">
-            <div class="img-holder">
-              <img class='grid-item-img' data-toggle='modal' data-target='#viewRecipeModal' ng-click='ctrl.viewRecipe(recipe.id);' ng-src="{{recipe.img_url}}" alt="Recipe Image">
-            </div>
 
-            <h3>{{recipe.name}}</h3>
-            <p>Meal: {{recipe.meal}}
-              Difficulty: {{recipe.difficulty}}
-              Ingredients: {{recipe.ingredients}}
-              Directions: {{recipe.directions}}
-            </p>
-            <button type="button" class='btn' ng-click='ctrl.deleteRecipe(recipe.id)'>Delete Recipe</button>
-          </div>
-
-          <!-- Edit recipe form -->
-          <form ng-submit='ctrl.editRecipe(recipe.id);'>
-            <input type="text" ng-model='ctrl.editRecipeData.name' placeholder="{{recipe.name}}"/>
-            <input type="text" ng-model='ctrl.editRecipeData.url' placeholder="{{recipe.url}}"/>
-            <input type="text" ng-model='ctrl.editRecipeData.img_url' placeholder="{{recipe.img_url}}"/>
-            <!-- Radio input -->
-            <input type="text" ng-model='ctrl.editRecipeData.difficulty' placeholder="{{recipe.difficulty}}"/>
-            <input type="text" ng-model='ctrl.editRecipeData.ingredients' placeholder="{{recipe.ingredients}}"/>
-            <input type="text" ng-model='ctrl.editRecipeData.directions' placeholder="{{recipe.directions}}"/>
-            <!-- Serving Size should be a select with options for numbers -->
-            <input type="text" ng-model='ctrl.editRecipeData.serving_size' placeholder="{{recipe.serving_size}}"/>
-            <!-- Cuisine should probably be a drop-down -->
-            <input type="text" ng-model='ctrl.editRecipeData.cuisine' placeholder="{{recipe.cuisine}}"/>
-            <input type="text" ng-model='ctrl.editRecipeData.time_to_make' placeholder="{{recipe.time_to_make}}"/>
-            <input type="submit"  class="btn btn-default"  class="btn btn-default" class="btn btn-default" value="Edit Recipe">
-          </form>
-
-        </div>
         <!-- End ng-repeat -->
-      </div>
+      <!-- </div> -->
 
       <!-- view recipe modal -->
-      <div class="modal fade" id='viewRecipeModal' tabindex="-1" role='dialog' aria-labelledby='viewRecipeModalLabel' aria-hidden='true'>
-        <div class="modal-dialog" role='document'>
-          <div class="modal-content">
-            <div class="modal-header">
-              <a href='{{ctrl.viewRecipeData[0].url}}'><h1 class='modal-title' id="viewRecipeModalLabel">{{ctrl.viewRecipeData[0].name}}</h1></a>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Ingredients: {{ctrl.viewRecipeData[0].ingredients}}</p>
-              <p>Directions: {{ctrl.viewRecipeData[0].directions}}</p>
-              <p>Time to Make: {{ctrl.viewRecipeData[0].time_to_make}}</p>
-              <p>Serves: {{ctrl.viewRecipeData[0].serving_size}}</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+            
 
 
-      <!-- Add Recipe Modal -->
-      <div class="modal fade" id='addModal' tabindex="-1" role='dialog' aria-labelledby='addModalLabel' aria-hidden='true'>
-        <div class="modal-dialog" role='document'>
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class='modal-title' id="addModalLabel">Add Recipe</h1>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <!-- Add a new recipe: -->
-              <div class='new-recipe-form'>
-                <h2>Add A New Recipe</h2>
-                <form ng-submit='ctrl.addRecipe();'>
-                  <input type="text" ng-model='ctrl.newRecipeData.name' placeholder="Title"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.url' placeholder="URL"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.img_url' placeholder="Image URL"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.difficulty' placeholder="Difficulty"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.meal' placeholder="Meal">
-                  <!-- Serving Size should be a select with options for numbers -->
-                  <input type="text" ng-model='ctrl.newRecipeData.serving_size' placeholder="Servings"/>
-                  <!-- Cuisine should probably be a drop-down -->
-                  <input type="text" ng-model='ctrl.newRecipeData.cuisine' placeholder="Cuisine"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.time_to_make' placeholder="Time to Make (in minutes)"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.ingredients' placeholder="Ingredients"/>
-                  <input type="text" ng-model='ctrl.newRecipeData.directions' placeholder="Directions"/>
-                  <input type="submit"  class="btn btn-default"  class="btn btn-default" value="Submit"/>
-                </form>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+
+
 
 
 

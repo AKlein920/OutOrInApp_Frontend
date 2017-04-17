@@ -1,0 +1,20 @@
+<div ng-repeat='recipe in ctrl.myRecipes track by recipe.id'>
+
+  <div class="grid-item">
+    <div class="img-holder">
+      <a href="/edit/{{recipe.id}}"><img class='grid-item-img' ng-src="{{recipe.img_url}}" alt="Recipe Image"></a>
+    </div>
+
+    <h3>{{recipe.name}}</h3>
+    <p>Meal: {{recipe.meal}}
+      Difficulty: {{recipe.difficulty}}
+      Ingredients: {{recipe.ingredients}}
+      Directions: {{recipe.directions}}
+    </p>
+    <button type="button" class='btn' ng-click='ctrl.deleteRecipe(recipe.id)'>Delete Recipe</button>
+    <a href='/edit/{{recipe.id}}' class='btn btn-primary'>Edit</a>
+  </div>
+
+
+
+</div>

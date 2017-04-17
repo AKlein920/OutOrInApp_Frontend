@@ -1,10 +1,31 @@
-var app = angular.module("FoodApp", []);
+var app = angular.module("FoodApp", ['ngRoute']);
 
-app.controller('foodController', ['$http', function($http) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode({enabled: true});
+
+  $routeProvider.when('/', {
+    templateUrl: 'partials/index.html',
+    controller: 'foodController',
+    controllerAs: 'ctrl'
+  });
+  $routeProvider.when('/add', {
+    templateUrl: 'partials/add.html',
+    controller: 'foodController',
+    controllerAs: 'ctrl'
+  });
+  $routeProvider.when('/edit/:id', {
+    templateUrl: 'partials/edit.html',
+    controller: 'foodController',
+    controllerAs: 'ctrl'
+  })
+}]);
+
+app.controller('foodController', ['$http', '$routeParams', function($http, $routeParams) {
+  this.id = $routeParams.id;
 
 // app URL(local at this time - must change to Heroku)
-// this.url = 'http://localhost:3000';
-this.url = 'https://out-or-in-app--api.herokuapp.com';
+this.url = 'http://localhost:3000';
+// this.url = 'https://out-or-in-app--api.herokuapp.com';
 this.user = {};
 this.newRecipeData = {};
 this.editRecipeData = {};
@@ -37,6 +58,7 @@ if (localStorage.length) {
   // this.loggedIn = false;
   this.signIn = {};
   this.login = function() {
+    console.log('inside login');
     $http({
       method: 'POST',
       url: this.url + '/users/login',
@@ -65,15 +87,12 @@ if (localStorage.length) {
     localStorage.removeItem('userId')
     localStorage.removeItem('username')
     this.loggedIn = false;
-    this.show = false;
     this.user = null;
     this.prompt = false;
   }
 
-  // Function to see user's recipes:
-    this.show = false;
-    this.showAllRecipes = function() {
-      this.show = true;
+  // Function to see user's recipes on page load, if user signed in:
+    // this.showAllRecipes = function() {
       $http({
         method: 'GET',
         url: this.url + '/users/' + localStorage.userId + '/recipes',
@@ -87,7 +106,7 @@ if (localStorage.length) {
           this.prompt = true;
         }
       }.bind(this));
-    };
+    // };
 
     // Function to add a new recipe to a user's collection:
     this.addRecipe = function() {
@@ -112,7 +131,8 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
-        // this.myRecipes.push(this.newRecipeData);
+        this.myRecipes.push(response.data);
+        console.log(this.myRecipes);
         this.newRecipeData = {};
         this.prompt = false;
       }.bind(this));
@@ -158,7 +178,6 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response.data);
-        //ToDo: update recipes array with new data
       },
       function(response) {
         console.error(response);
@@ -179,6 +198,12 @@ if (localStorage.length) {
         }
       }).then(function(response) {
         console.log(response);
+        for (var i = 0; i < this.myRecipes.length; i++) {
+          if (this.myRecipes[i].id == id) {
+            this.myRecipes.splice(i, 1);
+          }
+        }
+        console.log(this.myRecipes);
       }.bind(this));
     }
 
@@ -195,5 +220,14 @@ if (localStorage.length) {
       this.logout();
     }.bind(this));
   };
+
+  // this.getFood2Fork = function(query) {
+  //   $http({
+  //     method: 'GET',
+  //     url: 'http://food2fork.com/api/search?key=' + '4081d2e70c71f179f531d390ecdf04c5&q=' + query
+  //   }).then(function(response) {
+  //     console.log(response.data);
+  //   })
+  // }
 
 }]); // end app controller
