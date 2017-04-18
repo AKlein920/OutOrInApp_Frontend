@@ -1,8 +1,9 @@
 
-  <p>Ingredients: {{recipe.ingredients}}</p>
-  <p>Directions: {{recipedirections}}</p>
-  <p>Time to Make: {{recipe.time_to_make}}</p>
-  <p>Serves: {{recipe.serving_size}}</p>
+  <p>Name: {{ctrl.viewRecipeData}}</p>
+  <p>Ingredients: {{ctrl.viewRecipeData[0].ingredients}}</p>
+  <p>Directions: {{ctrl.viewRecipeData[0].directions}}</p>
+  <p>Time to Make: {{ctrl.viewRecipeData[0].time_to_make}}</p>
+  <p>Serves: {{ctrl.viewRecipeData[0].serving_size}}</p>
 
 <!-- Edit recipe form -->
 <form ng-submit='ctrl.editRecipe(ctrl.id);'>
