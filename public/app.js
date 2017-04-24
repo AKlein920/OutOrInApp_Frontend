@@ -20,13 +20,21 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   });
 }]);
 
-app.controller('foodController', ['$http', '$routeParams', '$location', '$q', function($http, $routeParams, $location, $q) {
+app.factory('selectRecipe', function() {
+  var selectRecipe = [];
+  return{
+    recipe: selectRecipe
+  };
+});
+
+app.controller('foodController', ['$http', '$routeParams', '$location', 'selectRecipe', '$scope', function($http, $routeParams, $location, selectRecipe, $scope) {
   this.id = $routeParams.id;
 
   // app URL(local at this time - must change to Heroku)
   this.url = 'http://localhost:3000';
   // this.url = 'https://out-or-in-app--api.herokuapp.com';
   this.user = {};
+  this.newRecipeData = {};
   this.newRecipeData = {};
   this.editRecipeData = {};
   this.myRecipes = [];
@@ -37,6 +45,22 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
   if (localStorage.length) {
     this.loggedIn = true;
   }
+
+    this.showAllRecipes = function() {
+      $http({
+        method: 'GET',
+        url: this.url + '/users/' + localStorage.userId + '/recipes',
+        headers: {
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        }
+      }).then(function(response) {
+        console.log(response.data);
+        this.myRecipes = response.data;
+        if (this.myRecipes.length === 0) {
+          this.prompt = true;
+        }
+      }.bind(this));
+    };
 
   ///// Function to Sign Up:
   this.signUpData = {};
@@ -52,7 +76,7 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
       this.signUpData = {};
       this.signedUp = true;
     }.bind(this));
-  }
+  };
 
   ///// Function to Log In:
   // this.loggedIn = false;
@@ -77,35 +101,21 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
         this.signIn = {};
         this.loggedIn = true;
         this.wrongPassword = false;
+        this.showAllRecipes();
       }
     }.bind(this));
-  }
+  };
 
   ///// Function to Log Out:
   this.logout = function() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
-    localStorage.removeItem('username')
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     this.loggedIn = false;
     this.user = null;
     this.prompt = false;
-  }
+  };
 
-  // Function to see user's recipes on page load, if user signed in:
-    // this.showAllRecipes = function() {
-      $http({
-        method: 'GET',
-        url: this.url + '/users/' + localStorage.userId + '/recipes',
-        headers: {
-          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
-        }
-      }).then(function(response) {
-        console.log(response.data);
-        this.myRecipes = response.data;
-        if (this.myRecipes.length == 0) {
-          this.prompt = true;
-        }
-      }.bind(this));
     // };
 
       // Function to add a new recipe to a user's collection:
@@ -140,21 +150,22 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
     };
 
     // Function to view individual recipe:
- this.viewRecipeData = {};
-    this.viewRecipe = function(id) {
-      // console.log('viewing');
-      $http({
-        method: 'GET',
-        url: this.url + '/users/' + localStorage.userId + '/recipes/' + id,
-        headers: {
-          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
-        }
-      }).then(function(response) {
-        this.viewRecipeData = response.data[0];
-        console.log(this);
-      }.bind(this));
-      console.log(this);
-    }
+    var self = this;
+
+    this.viewRecipe = function(index) {
+      // console.log(selectRecipe.recipe);
+      // console.log(this);
+      // console.log(self);
+      // self.selectedRecipe = selectRecipe.selectRecipe;
+      selectRecipe.recipe = [];
+      selectRecipe.recipe.push(self.myRecipes[index]);
+      console.log(selectRecipe.recipe);
+      self.viewRecipeData = selectRecipe.recipe;
+      console.log(self);
+      $location.path('/edit/' + index);
+      // $rootScope.$apply();
+    };
+    this.viewRecipeData = [];
 
     // Function to edit a recipe:
     this.editRecipe = function(id) {
@@ -191,7 +202,7 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
     this.areYouSure = false;
     this.IAmSure = function() {
       this.areYouSure = true;
-    }
+    };
     this.deleteRecipe = function(id) {
       $http({
         method: 'DELETE',
@@ -208,7 +219,7 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
         }
         console.log(this.myRecipes);
       }.bind(this));
-    }
+    };
 
   // Function to delete user account:
   this.deleteMyAccount = function() {
@@ -230,7 +241,7 @@ app.controller('foodController', ['$http', '$routeParams', '$location', '$q', fu
       url: 'http://food2fork.com/api/search?key=' + '4081d2e70c71f179f531d390ecdf04c5&q=' + query
     }).then(function(response) {
       console.log(response.data);
-    })
-  }
+    });
+  };
 
 }]); // end app controller
